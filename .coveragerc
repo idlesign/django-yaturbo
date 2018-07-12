@@ -1,0 +1,3 @@
+[run]
+include = yaturbo/*
+omit = yaturbo/migrations/*, yaturbo/tests/*
