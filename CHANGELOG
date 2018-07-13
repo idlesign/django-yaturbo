@@ -4,6 +4,7 @@ django-yaturbo changelog
 
 Unreleased
 ----------
++ Introduced turbo contents sanitizing tools.
 + Now can define turbo item 'source' and 'topic'.
 + YandexTurboFeed is now importable from package root.
 

@@ -1,8 +1,24 @@
 # -*- encoding: utf-8 -*-
 from __future__ import unicode_literals
 
+from bleach import clean
 from django.contrib.syndication.views import Feed as _Feed
 from django.utils.feedgenerator import Rss201rev2Feed as FeedType
+
+from .settings import TURBO_ALLOWED_ATTRS, TURBO_ALLOWED_TAGS
+
+
+def sanitize_turbo(html, allowed_tags=TURBO_ALLOWED_TAGS, allowed_attrs=TURBO_ALLOWED_ATTRS):
+    """Sanitizes HTML, removing not allowed tags and attributes.
+
+    :param str|unicode html:
+
+    :param list allowed_tags: List of allowed tags.
+    :param dict allowed_attrs: Dictionary with attributes allowed for tags.
+
+    :rtype: unicode
+    """
+    return clean(html, tags=allowed_tags, attributes=allowed_attrs, strip=True)
 
 
 class YandexTurboFeedType(FeedType):
@@ -109,6 +125,13 @@ class YandexTurboFeed(_Feed):
     """
     feed_type = YandexTurboFeedType
 
+    turbo_sanitize = False
+    """Whether to automatically sanitize HTML contents returned from `.item_turbo()`.
+    
+    Can be useful if you do not keep special HTML for Turbo pages.
+    
+    """
+
     def __init__(self):
         super(YandexTurboFeed, self).__init__()
         self.analytics = []
@@ -213,8 +236,13 @@ class YandexTurboFeed(_Feed):
 
         get_dyn = self._get_dynamic_attr
 
+        contents = get_dyn('item_turbo', item)
+
+        if contents and self.turbo_sanitize:
+            contents = sanitize_turbo(contents)
+
         kwargs.update({
-            'ya_contents': get_dyn('item_turbo', item),
+            'ya_contents': contents,
             'ya_source': get_dyn('item_turbo_source', item),
             'ya_topic': get_dyn('item_turbo_topic', item),
         })

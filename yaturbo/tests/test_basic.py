@@ -10,6 +10,8 @@ class MyFeed(YandexTurboFeed):
     link = '/here/'
     description = 'descr'
 
+    turbo_sanitize = True
+
     def __init__(self, items):
         super(MyFeed, self).__init__()
         self.items = items
@@ -59,6 +61,11 @@ def test_feed(request_get):
             'link': 'd',
             'source': 'http://some.com',
             'topic': 'Title',
+        },
+        {
+            'title': 'b',
+            'descr': '<span><div data-x="y">sanitized</div></span>',
+            'link': 'link_b',
         }
     ])
 
@@ -85,6 +92,7 @@ def test_feed(request_get):
         '<turbo:content><![CDATA[turbo!]]></turbo:content>',
         '<turbo:source>http://some.com</turbo:source>',
         '<turbo:topic>Title</turbo:topic>',
+        '<turbo:content><![CDATA[<div>sanitized</div>]]></turbo:content>',
     ]
 
     for chunk in chunks:

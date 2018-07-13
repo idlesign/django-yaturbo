@@ -1,6 +1,5 @@
 API
 ===
 
-
-.. autoclass:: yaturbo.YandexTurboFeed
-    :members:
+.. automodule:: yaturbo.toolbox
+   :members:

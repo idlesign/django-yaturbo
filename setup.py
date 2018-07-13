@@ -46,6 +46,7 @@ setup(
     test_suite='tests',
     tests_require=[
         'pytest',
+        'bleach',
         'pytest-djangoapp>=0.7.1',
     ],
 
