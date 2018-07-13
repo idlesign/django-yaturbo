@@ -23,6 +23,32 @@ class MyFeed(YandexTurboFeed):
     def item_link(self, item):
         return item['link']
 
+    def item_turbo_source(self, item):
+        return item.get('source')
+
+    def item_turbo_topic(self, item):
+        return item.get('topic')
+
+
+class MyFeedDefaults(YandexTurboFeed):
+
+    title = 'title1'
+    link = '/there/'
+    description = 'descr'
+
+    def __init__(self, items):
+        super(MyFeedDefaults, self).__init__()
+        self.items = items
+
+    def item_title(self, item):
+        return item['title']
+
+    def item_description(self, item):
+        return item['descr']
+
+    def item_link(self, item):
+        return item['link']
+
 
 def test_feed(request_get):
 
@@ -31,6 +57,8 @@ def test_feed(request_get):
             'title': 'a',
             'descr': 'turbo!',
             'link': 'd',
+            'source': 'http://some.com',
+            'topic': 'Title',
         }
     ])
 
@@ -55,6 +83,8 @@ def test_feed(request_get):
         'turbo-ad-id="page-bottom"',
         'item turbo="true"',
         '<turbo:content><![CDATA[turbo!]]></turbo:content>',
+        '<turbo:source>http://some.com</turbo:source>',
+        '<turbo:topic>Title</turbo:topic>',
     ]
 
     for chunk in chunks:
@@ -63,7 +93,7 @@ def test_feed(request_get):
 
 def test_noturbo(request_get):
 
-    feed = MyFeed([
+    feed = MyFeedDefaults([
         {
             'title': 'a',
             'descr': '',

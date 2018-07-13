@@ -52,8 +52,6 @@ class YandexTurboFeedType(FeedType):
         super(YandexTurboFeedType, self).add_item_elements(handler, item)
 
         # todo maybe
-        # turbo:source
-        # turbo:topic
         # yandex:related
 
         turbo_contents = item['ya_contents']
@@ -64,6 +62,14 @@ class YandexTurboFeedType(FeedType):
         handler.startElement('turbo:content', {})
         handler.ignorableWhitespace('<![CDATA[%s]]>' % turbo_contents)
         handler.endElement('turbo:content')
+
+        source = item['ya_source']
+        if source:
+            handler.addQuickElement('turbo:source', source)
+
+        topic = item['ya_topic']
+        if topic:
+            handler.addQuickElement('turbo:topic', topic)
 
 
 class YandexTurboFeed(_Feed):
@@ -126,6 +132,9 @@ class YandexTurboFeed(_Feed):
             'turbo-ad-id': turbo_id,
         })
 
+    # todo maybe ad methods for
+    # adfox
+
     def configure_analytics_yandex(self, ident, params=None):
         """Configure Yandex Metrika analytics counter.
 
@@ -157,6 +166,13 @@ class YandexTurboFeed(_Feed):
             'id': ident,
         })
 
+    # todo maybe analytics methods for
+    # LiveInternet
+    # Mail.RU
+    # Rambler
+    # Mediascope(TNS)
+    # + custom
+
     def item_turbo(self, item):
         """This can be overridden to set turbo contents.
 
@@ -168,9 +184,41 @@ class YandexTurboFeed(_Feed):
         # todo maybe automatic html transform, e.g. with bleach
         return self.item_description(item)
 
+    def item_turbo_source(self, item):
+        """This can be overridden to set turbo source URL.
+
+        Can be used with Yandex Metrika.
+
+        :param item:
+
+        :rtype: str|unicode
+
+        """
+        return ''
+
+    def item_turbo_topic(self, item):
+        """This can be overridden to set turbo page topic (title).
+
+        Can be used with Yandex Metrika.
+
+        :param item:
+
+        :rtype: str|unicode
+
+        """
+        return ''
+
     def item_extra_kwargs(self, item):
         kwargs = super(YandexTurboFeed, self).item_extra_kwargs(item)
-        kwargs['ya_contents'] = self._get_dynamic_attr('item_turbo', item)
+
+        get_dyn = self._get_dynamic_attr
+
+        kwargs.update({
+            'ya_contents': get_dyn('item_turbo', item),
+            'ya_source': get_dyn('item_turbo_source', item),
+            'ya_topic': get_dyn('item_turbo_topic', item),
+        })
+
         return kwargs
 
     def feed_extra_kwargs(self, obj):

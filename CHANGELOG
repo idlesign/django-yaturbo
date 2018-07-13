@@ -2,6 +2,11 @@ django-yaturbo changelog
 ========================
 
 
+Unreleased
+----------
++ Now can define turbo item 'source' and 'topic'.
+
+
 v0.1.0
 ------
 + Basic functionality.

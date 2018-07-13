@@ -24,6 +24,8 @@ Quickstart
             #
             return item.get('turbo', '')
 
+           # You can also override other item_turbo_* family members.
+
 
 2. Pass an instantiated (and optionally configured) feed object to `urlpatterns`:
 
