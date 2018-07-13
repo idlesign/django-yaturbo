@@ -77,7 +77,7 @@ class YandexTurboFeed(_Feed):
 
     .. code-block:: python
 
-        from yaturbo.toolbox import YandexTurboFeed
+        from yaturbo import YandexTurboFeed
 
         class TurboFeed(YandexTurboFeed):
             '''

@@ -33,7 +33,7 @@ of Django Syndication Feed Framework contrib:
 .. code-block:: python
 
     # feeds.py
-    from yaturbo.toolbox import YandexTurboFeed
+    from yaturbo import YandexTurboFeed
 
     class TurboFeed(YandexTurboFeed):
         """

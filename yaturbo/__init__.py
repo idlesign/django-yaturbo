@@ -1,6 +1,8 @@
 # -*- encoding: utf-8 -*-
 from __future__ import unicode_literals
 
+from .toolbox import YandexTurboFeed
+
 
 VERSION = (0, 1, 0)
 """Application version number tuple."""
