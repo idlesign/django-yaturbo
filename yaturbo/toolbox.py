@@ -102,6 +102,8 @@ class YandexTurboFeed(_Feed):
 
             '''
 
+            turbo_sanitize = True  # Let's strip HTML tags unsupported by Turbo pages.
+
             def item_turbo(self, item):
                 return 'turbo contents'
 
