@@ -1,7 +1,14 @@
 # -*- encoding: utf-8 -*-
 from __future__ import unicode_literals
 
-from bleach import clean
+try:
+    from bleach import clean
+
+except ImportError:
+
+    def clean(*args, **kwargs):
+        raise ImportError('Please install `bleach` package to use sanitization.')
+
 from django.contrib.syndication.views import Feed as _Feed
 from django.utils.feedgenerator import Rss201rev2Feed as FeedType
 
