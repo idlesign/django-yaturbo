@@ -2,8 +2,8 @@ django-yaturbo changelog
 ========================
 
 
-Unreleased
-----------
+v0.2.1
+------
 * 'bleach' is now required only if sanitization is enabled (see #1).
 
 
