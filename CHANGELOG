@@ -2,8 +2,8 @@ django-yaturbo changelog
 ========================
 
 
-Unreleased
-----------
+v0.3.0 [2019-10-24]
+-------------------
 ! Dropped QA for Django 1.7.
 ! Dropped QA for Python 2.
 ! Dropped QA for Python 3.4.
