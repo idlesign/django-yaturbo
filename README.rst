@@ -8,7 +8,7 @@ https://github.com/idlesign/django-yaturbo
 
 ----
 
-|release| |lic| |ci| |coverage| |health|
+|release| |lic| |ci| |coverage|
 
 .. |release| image:: https://img.shields.io/pypi/v/django-yaturbo.svg
     :target: https://pypi.python.org/pypi/django-yaturbo
@@ -21,9 +21,6 @@ https://github.com/idlesign/django-yaturbo
 
 .. |coverage| image:: https://img.shields.io/coveralls/idlesign/django-yaturbo/master.svg
     :target: https://coveralls.io/r/idlesign/django-yaturbo
-
-.. |health| image:: https://landscape.io/github/idlesign/django-yaturbo/master/landscape.svg?style=flat
-    :target: https://landscape.io/github/idlesign/django-yaturbo/master
 
 
 Description
