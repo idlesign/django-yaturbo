@@ -18,44 +18,6 @@ import sys, os
 sys.path.insert(0, os.path.abspath('../../'))
 from yaturbo import VERSION
 
-# -- Mocking ------------------------------------------------------------------
-
-# This is used to mock certain modules.
-# It helps to build docs in environments where those modules are not available.
-# E.g. it could be useful for http://readthedocs.org/
-MODULES_TO_MOCK = []
-
-
-if MODULES_TO_MOCK:
-
-    class ModuleMock(object):
-
-        __all__ = []
-
-        def __init__(self, *args, **kwargs):
-            pass
-
-        def __call__(self, *args, **kwargs):
-            return ModuleMock()
-
-        def __iter__(self):
-            return iter([])
-
-        @classmethod
-        def __getattr__(cls, name):
-            if name in ('__file__', '__path__'):
-                return '/dev/null'
-            elif name.upper() != name and name[0] == name[0].upper():
-                # Mock classes.
-                MockType = type(name, (ModuleMock,), {})
-                MockType.__module__ = __name__
-                return MockType
-            return ModuleMock()
-
-    for mod_name in MODULES_TO_MOCK:
-        sys.modules[mod_name] = ModuleMock()
-
-
 # -- General configuration -----------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -82,7 +44,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'django-yaturbo'
-copyright = u'2018-2019, Igor `idle sign` Starikov'
+copyright = u'2018-2020, Igor `idle sign` Starikov'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
