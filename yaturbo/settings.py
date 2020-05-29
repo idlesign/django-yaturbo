@@ -1,6 +1,3 @@
-# -*- encoding: utf-8 -*-
-from __future__ import unicode_literals
-
 
 TURBO_ALLOWED_TAGS = [
     'a',

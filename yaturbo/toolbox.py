@@ -1,5 +1,4 @@
-# -*- encoding: utf-8 -*-
-from __future__ import unicode_literals
+from typing import List, Dict
 
 try:
     from bleach import clean
@@ -15,15 +14,19 @@ from django.utils.feedgenerator import Rss201rev2Feed as FeedType
 from .settings import TURBO_ALLOWED_ATTRS, TURBO_ALLOWED_TAGS
 
 
-def sanitize_turbo(html, allowed_tags=TURBO_ALLOWED_TAGS, allowed_attrs=TURBO_ALLOWED_ATTRS):
+def sanitize_turbo(
+        html: str,
+        allowed_tags: List[str] = TURBO_ALLOWED_TAGS,
+        allowed_attrs: Dict[str, List[str]] = TURBO_ALLOWED_ATTRS
+
+) -> str:
     """Sanitizes HTML, removing not allowed tags and attributes.
 
-    :param str|unicode html:
+    :param html:
 
-    :param list allowed_tags: List of allowed tags.
-    :param dict allowed_attrs: Dictionary with attributes allowed for tags.
+    :param allowed_tags: List of allowed tags.
+    :param allowed_attrs: Dictionary with attributes allowed for tags.
 
-    :rtype: unicode
     """
     return clean(html, tags=allowed_tags, attributes=allowed_attrs, strip=True)
 
@@ -32,12 +35,12 @@ class YandexTurboFeedType(FeedType):
 
     def __init__(self, *args, **kwargs):
 
-        self._analytics = kwargs.pop('ya_analytics', [])
-        self._ads = kwargs.pop('ya_ads', [])
+        self._analytics: list = kwargs.pop('ya_analytics', [])
+        self._ads: list = kwargs.pop('ya_ads', [])
 
         super(YandexTurboFeedType, self).__init__(*args, **kwargs)
 
-    def rss_attributes(self):
+    def rss_attributes(self) -> dict:
         attrs = super(YandexTurboFeedType, self).rss_attributes()
 
         attrs.update({
@@ -47,7 +50,7 @@ class YandexTurboFeedType(FeedType):
 
         return attrs
 
-    def item_attributes(self, item):
+    def item_attributes(self, item: dict) -> dict:
         attrs = super(YandexTurboFeedType, self).item_attributes(item)
 
         if not item['ya_contents']:
@@ -134,7 +137,7 @@ class YandexTurboFeed(_Feed):
     """
     feed_type = YandexTurboFeedType
 
-    turbo_sanitize = False
+    turbo_sanitize: bool = False
     """Whether to automatically sanitize HTML contents returned from `.item_turbo()`.
     
     Can be useful if you do not keep special HTML for Turbo pages.
@@ -143,19 +146,15 @@ class YandexTurboFeed(_Feed):
 
     def __init__(self):
         super(YandexTurboFeed, self).__init__()
-        self.analytics = []
-        self.ads = []
+        self.analytics: List[Dict] = []
+        self.ads: List[Dict] = []
 
-        # Django < 1.10 has obfuscated __get_dynamic_attr
-        if not hasattr(self, '_get_dynamic_attr'):
-            self._get_dynamic_attr = getattr(self, '_Feed__get_dynamic_attr')
-
-    def configure_ad_yandex(self, ident, turbo_id=''):
+    def configure_ad_yandex(self, ident: str, turbo_id: str = ''):
         """Configure Yandex Advertisement Network.
 
-        :param str|unicode ident: Ad ID.
+        :param ident: Ad ID.
 
-        :param str|unicode turbo_id: ID of a place (figure) on Turbo page where to put an Ad block.
+        :param turbo_id: ID of a place (figure) on Turbo page where to put an Ad block.
 
         """
         self.ads.append({
@@ -167,12 +166,12 @@ class YandexTurboFeed(_Feed):
     # todo maybe ad methods for
     # adfox
 
-    def configure_analytics_yandex(self, ident, params=None):
+    def configure_analytics_yandex(self, ident: str, params: dict = None):
         """Configure Yandex Metrika analytics counter.
 
-        :param str|unicode ident: Metrika counter ID.
+        :param ident: Metrika counter ID.
 
-        :param dict params: Additional params.
+        :param params: Additional params.
 
         """
         params = params or {}
@@ -187,10 +186,10 @@ class YandexTurboFeed(_Feed):
 
         self.analytics.append(data)
 
-    def configure_analytics_google(self, ident):
+    def configure_analytics_google(self, ident: str):
         """Configure Google Analytics counter.
 
-        :param str|unicode ident: Counter ID.
+        :param ident: Counter ID.
 
         """
         self.analytics.append({
@@ -205,42 +204,36 @@ class YandexTurboFeed(_Feed):
     # Mediascope(TNS)
     # + custom
 
-    def item_turbo(self, item):
+    def item_turbo(self, item) -> str:
         """This can be overridden to set turbo contents.
 
         :param item:
-
-        :rtype: str|unicode
 
         """
         # todo maybe automatic html transform, e.g. with bleach
         return self.item_description(item)
 
-    def item_turbo_source(self, item):
+    def item_turbo_source(self, item) -> str:
         """This can be overridden to set turbo source URL.
 
         Can be used with Yandex Metrika.
 
         :param item:
 
-        :rtype: str|unicode
-
         """
         return ''
 
-    def item_turbo_topic(self, item):
+    def item_turbo_topic(self, item) -> str:
         """This can be overridden to set turbo page topic (title).
 
         Can be used with Yandex Metrika.
 
         :param item:
 
-        :rtype: str|unicode
-
         """
         return ''
 
-    def item_extra_kwargs(self, item):
+    def item_extra_kwargs(self, item) -> dict:
         kwargs = super(YandexTurboFeed, self).item_extra_kwargs(item)
 
         get_dyn = self._get_dynamic_attr
@@ -258,7 +251,7 @@ class YandexTurboFeed(_Feed):
 
         return kwargs
 
-    def feed_extra_kwargs(self, obj):
+    def feed_extra_kwargs(self, obj) -> dict:
         kwargs = super(YandexTurboFeed, self).feed_extra_kwargs(obj)
 
         kwargs.update({
