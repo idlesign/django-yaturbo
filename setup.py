@@ -47,7 +47,7 @@ setup(
     tests_require=[
         'pytest',
         'bleach',
-        'pytest-djangoapp>=0.7.1',
+        'pytest-djangoapp>=0.15.1',
     ],
 
     classifiers=[
