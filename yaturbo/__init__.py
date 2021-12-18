@@ -8,4 +8,4 @@ VERSION_STR = '.'.join(map(str, VERSION))
 """Application version number string."""
 
 
-default_app_config = 'yaturbo.config.YaturboConfig'
+default_app_config = 'yaturbo.apps.YaturboConfig'
